@@ -24,13 +24,11 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           selectInput("videogame_platforms_plot", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
-                                                                            "PC", "NES (Nintendo Entertainment System)",
-                                                                            "GB (Game Boy)", "GBA (Game Boy Advance)", "DS (Dual Screen)",
-                                                                            "x360 (Xbox360)", "SNES (Super Nintendo Entertainment System)",
-                                                                            "3DS", "N64 (Nintendo 64)", "XB (Xbox)", "2600 (Atari 2600)",
-                                                                            "PSP", "XOne", "WiiU", "GC (GameCube)", "GEN", "DC",
-                                                                            "SAT", "SCD", "WS (Wonder Swan)", "NG", "TG16", "3DO", "GG",
-                                                                            "PCFX"))),
+                                                                                           "PC", "NES", "GB", "GBA", "DS", "x360", "SNES",
+                                                                                           "3DS", "N64", "XB", "2600", "GEN", "DC",
+                                                                                           "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
+                                                                                            "NG", "TG16", "3DO", "GG", "PCFX"))),
+                                                                                          
                         mainPanel(
                           plotOutput("videogame_platforms_plot")
                         )
@@ -41,19 +39,17 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           selectInput("videogame_platforms_table", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
-                                                                                           "PC", "NES (Nintendo Entertainment System)",
-                                                                                           "GB (Game Boy)", "GBA (Game Boy Advance)", "DS (Dual Screen)",
-                                                                                           "x360 (Xbox360)", "SNES (Super Nintendo Entertainment System)",
-                                                                                           "3DS", "N64 (Nintendo 64)", "XB (Xbox)", "2600 (Atari 2600)",
-                                                                                           "PSP", "XOne", "WiiU", "GC (GameCube)", "GEN", "DC",
-                                                                                           "SAT", "SCD", "WS (Wonder Swan)", "NG", "TG16", "3DO", "GG",
-                                                                                           "PCFX"))))),
-                       mainPanel(
-                         plotOutput("videogame_platforms_table")
-             )
+                                                                                            "PC", "NES", "GB", "GBA", "DS", "x360", "SNES",
+                                                                                            "3DS", "N64", "XB", "2600", "GEN", "DC",
+                                                                                            "PSP", "XOne", "WiiU", "GC", "SAT", "SCD", "WS",
+                                                                                            "NG", "TG16", "3DO", "GG", "PCFX"))),
+                        mainPanel(
+                          tableOutput("videogame_platforms_table")
+                        )
                       )
+             )
   )
-
+)
 
 
 
@@ -64,12 +60,12 @@ server <- function(input, output) {
       select(Global_Sales,
              Year,
              Platform) %>% 
-      filter(!is.na(Global_Sales),!is.na(Year), !is.na(Platform),
-             Platform %in% input$platforms) %>%
+      filter(Platform %in% input$videogame_platforms_plot,
+             Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
       group_by(Platform, Year) %>% 
       summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
-      ggplot(aes(x = Year, y = global_sales_in_that_year)) +
-      geom_line() +
+      ggplot(aes(x = Year, y = global_sales_in_that_year), col="blue") +
+      geom_col() +
       labs(x = "Year", y = "Sales in Million")
   })
 }

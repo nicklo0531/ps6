@@ -50,9 +50,9 @@ video_game %>%
 video_game %>% 
   select(Global_Sales,
          Year,
-         Publisher) %>% 
-  filter(!is.na(Global_Sales),!is.na(Year), !is.na(Publisher)) %>%
-  group_by(Publisher, Year) %>% 
+         Platform) %>% 
+  filter(!is.na(Global_Sales),!is.na(Year), !is.na(Platform)) %>%
+  group_by(Platform, Year) %>% 
   summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
   print(n = 2500)
 
@@ -60,9 +60,9 @@ video_game %>%
 video_game %>% 
   select(Global_Sales,
          Year,
-         Publisher) %>% 
-  filter(!is.na(Global_Sales),!is.na(Year), !is.na(Publisher)) %>%
-  group_by(Publisher, Year) %>% 
+         Platform) %>% 
+  filter(!is.na(Global_Sales),!is.na(Year), !is.na(Platform)) %>%
+  group_by(Platform, Year) %>% 
   summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
   ggplot(aes(x = Year, y = global_sales_in_that_year)) +
   geom_line() +
