@@ -23,7 +23,7 @@ ui <- fluidPage(
              tabPanel("Platform Plot",
                       sidebarLayout(
                         sidebarPanel(
-                          selectInput("platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
+                          selectInput("videogame_platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
                                                                             "PC", "NES (Nintendo Entertainment System)",
                                                                             "GB (Game Boy)", "GBA (Game Boy Advance)", "DS (Dual Screen)",
                                                                             "x360 (Xbox360)", "SNES (Super Nintendo Entertainment System)",
@@ -45,21 +45,22 @@ ui <- fluidPage(
 
 ##Server
 server <- function(input, output) {
+  output$videogame_platforms <- renderPlot({
+    video_game %>% 
+      select(Global_Sales,
+             Year,
+             Publisher) %>% 
+      filter(!is.na(Global_Sales),!is.na(Year), !is.na(Publisher),
+             Publisher %in% input$platforms) %>%
+      group_by(Publisher, Year) %>% 
+      summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
+      ggplot(aes(x = Year, y = Sales)) +
+      geom_line() +
+      labs(x = "Genre", y = "Sales in Million")
+      })
+    
 
-    output$videogame_platforms <- renderPlot({
-      
-      input$platforms 
-      
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
-}
+    }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
