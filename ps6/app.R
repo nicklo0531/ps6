@@ -8,12 +8,16 @@
 #
 
 library(shiny)
+library(tidyverse)
+read_delim("../vgsales.csv")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Video Game Trends Overtime"),
+    p("I think this is ",
+    em("hard")),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
