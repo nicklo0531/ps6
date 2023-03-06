@@ -30,7 +30,7 @@ ui <- fluidPage(
                                                                             "3DS", "N64 (Nintendo 64)", "XB (Xbox)", "2600 (Atari 2600)",
                                                                             "PSP", "XOne", "WiiU", "GC (GameCube)", "GEN", "DC",
                                                                             "SAT", "SCD", "WS (Wonder Swan)", "NG", "TG16", "3DO", "GG",
-                                                                            "PCFX"), multiple = TRUE)),
+                                                                            "PCFX"))),
                         mainPanel(
                           plotOutput("videogame_platforms")
                         )
@@ -49,18 +49,16 @@ server <- function(input, output) {
     video_game %>% 
       select(Global_Sales,
              Year,
-             Publisher) %>% 
-      filter(!is.na(Global_Sales),!is.na(Year), !is.na(Publisher),
-             Publisher %in% input$platforms) %>%
-      group_by(Publisher, Year) %>% 
+             Platform) %>% 
+      filter(!is.na(Global_Sales),!is.na(Year), !is.na(Platform),
+             Platform %in% input$platforms) %>%
+      group_by(Platform, Year) %>% 
       summarize(global_sales_in_that_year = mean(Global_Sales)) %>% 
-      ggplot(aes(x = Year, y = Sales)) +
+      ggplot(aes(x = Year, y = Global_Sales)) +
       geom_line() +
-      labs(x = "Genre", y = "Sales in Million")
-      })
-    
-
-    }
+      labs(x = "Year", y = "Sales in Million")
+  })
+}
 
 # Run the application 
 shinyApp(ui = ui, server = server)
