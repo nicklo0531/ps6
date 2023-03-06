@@ -1,21 +1,26 @@
 library(shiny)
 library(shinythemes)
 library(tidyverse)
-read_delim("../vgsales.csv")
+video_game <- read_delim("../vgsales.csv")
 
-# Define UI for application that draws a histogram
+##UI
 ui <- fluidPage(
   theme = shinytheme("cerulean"),
   
-  # Application title
+  ##Application title
   titlePanel("Video Game Trends Overtime"),
   
+  ##Navigation Page
   navbarPage("", 
+             ##Introduction
              tabPanel("Introduction",
-                      h2(p("This is the ", em("ps6"), ", which is a demo for my ", strong("final project")))),
+                      h2(p("This is the ", em("ps6"), ", which is a demo for my ", strong("final project."), 
+                           "This data is from Kaggle contains information about video games, such as names, platforms,
+                           sales, etc. I am going to use the platform, sales and year columns. Here is a small sample
+                           of the data:"))),
              
-             # Sidebar with a selectInput widget for number of bins 
-             tabPanel("Platforms",
+             ##Drop-down menu
+             tabPanel("Platform Plot",
                       sidebarLayout(
                         sidebarPanel(
                           selectInput("platforms", "Select the platform", c("Wii", "PS", "PS2", "PS3", "PS4", "PSV",
@@ -25,28 +30,20 @@ ui <- fluidPage(
                                                                             "3DS", "N64 (Nintendo 64)", "XB (Xbox)", "2600 (Atari 2600)",
                                                                             "PSP", "XOne", "WiiU", "GC (GameCube)", "GEN", "DC",
                                                                             "SAT", "SCD", "WS (Wonder Swan)", "NG", "TG16", "3DO", "GG",
-                                                                            "PCFX"), 
-                                      multiple = TRUE)
-                        ),
+                                                                            "PCFX"), multiple = TRUE)),
                         mainPanel(
                           plotOutput("videogame_platforms")
                         )
                       )
              ),
              
-             tabPanel("Genres")
+             tabPanel("Platform Table")
   )
 )
 
 
 
-
-
-
-
-
-
-# Define server logic required to draw a histogram
+##Server
 server <- function(input, output) {
 
     output$videogame_platforms <- renderPlot({
