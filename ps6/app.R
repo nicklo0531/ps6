@@ -68,6 +68,17 @@ server <- function(input, output) {
       geom_col() +
       labs(x = "Year", y = "Sales in Million")
   })
+  output$videogame_platforms_table <- renderTable({
+    video_game %>% 
+      select(Global_Sales,
+             Year,
+             Platform) %>% 
+      filter(Platform %in% input$videogame_platforms_table,
+             Global_Sales != "N/A", Year != "N/A", Platform != "N/A") %>%
+      group_by(Platform, Year) %>% 
+      summarize(global_sales_in_that_year = mean(Global_Sales))
+  })
+
 }
 
 # Run the application 
